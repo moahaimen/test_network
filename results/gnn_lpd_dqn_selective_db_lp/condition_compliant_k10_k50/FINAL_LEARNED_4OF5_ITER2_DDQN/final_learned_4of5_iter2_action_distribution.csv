@@ -1,0 +1,9 @@
+Topology,KEEP,K50,K100,K200,K300,K500,K800,Most_used
+abilene,607,983,0,0,4,51,371,K50
+geant,0,5,0,664,0,1,2,K200
+cernet,92,63,3,6,36,0,0,KEEP
+sprintlink,36,0,0,0,4,20,140,K800
+tiscali,136,0,0,0,1,16,47,KEEP
+ebone,185,15,0,0,0,0,0,KEEP
+germany50,0,0,0,0,0,0,288,K800
+vtlwavenet2011,1,39,0,0,0,0,0,K50

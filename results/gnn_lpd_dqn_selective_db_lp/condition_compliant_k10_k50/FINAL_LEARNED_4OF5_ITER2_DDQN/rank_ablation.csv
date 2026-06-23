@@ -1,0 +1,16 @@
+topology,K,ranking,mean_PR,mean_ms
+sprintlink,500,gnn_only,0.97,256.9
+sprintlink,500,relief_only,0.9979,259.3
+sprintlink,500,blend,0.996,251.6
+sprintlink,800,gnn_only,0.9883,374.5
+sprintlink,800,relief_only,1.0,380.1
+sprintlink,800,blend,0.9993,377.9
+tiscali,300,gnn_only,0.9268,206.4
+tiscali,300,relief_only,0.9236,193.5
+tiscali,300,blend,0.9243,207.8
+germany50,200,gnn_only,0.9356,127.6
+germany50,200,relief_only,0.99,141.1
+germany50,200,blend,0.9555,131.1
+cernet,50,gnn_only,1.0,55.1
+cernet,50,relief_only,1.0,54.5
+cernet,50,blend,1.0,61.0

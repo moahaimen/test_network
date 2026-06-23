@@ -1,0 +1,151 @@
+registry_config: configs/phase1_reactive_topologies.yaml
+
+experiment:
+  seed: 42
+  max_steps: 500
+  k_paths: 3
+  k_crit: 40
+  drl_method: both
+  split:
+    train: 0.70
+    val: 0.15
+    test: 0.15
+  lp_time_limit_sec: 25
+  full_mcf_time_limit_sec: 90
+  optimality_eval_steps: 30
+  output_dir: results/phase1_reactive
+  train_topologies:
+    - abilene_backbone
+    - geant_core
+    - ebone
+    - sprintlink
+    - tiscali
+    - vtlwavenet2011
+  eval_topologies:
+    - abilene_backbone
+    - geant_core
+    - ebone
+    - sprintlink
+    - tiscali
+  generalization_topologies:
+    - germany50_real
+    - cernet_real
+  methods:
+    - ospf
+    - ecmp
+    - topk
+    - bottleneck
+    - sensitivity
+    - erodrl
+    - flexdate
+    - cfrrl
+    - flexentry
+    - our_drl_ppo
+    - our_drl_dqn
+    - our_drl_dual_gate
+    - our_hybrid_moe_gate
+    - lp_optimal
+  failure_types:
+    - single_link_failure
+    - capacity_degradation
+    - multi_link_stress
+  failure_start_frac: 0.33
+  allow_synthetic_topologies:
+    - ebone
+    - sprintlink
+    - tiscali
+    - vtlwavenet2011
+
+traffic_generator:
+  name: mgm
+  steps: 500
+  seed: 42
+  base_scale: 120.0
+  diurnal_period: 96
+  weekly_period: 672
+  modulation_strength: 0.25
+  noise_std: 0.08
+  hotspot_frac: 0.1
+
+drl:
+  hidden_dim: 128
+  actor_lr: 0.0003
+  critic_lr: 0.001
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_ratio: 0.2
+  entropy_coef: 0.01
+  value_coef: 0.5
+  ppo_epochs: 6
+  minibatch_size: 64
+  max_epochs: 16
+  patience: 5
+  warmstart_epochs: 4
+  warmstart_lr: 0.001
+  device: cpu
+
+dqn:
+  hidden_dim: 128
+  lr: 0.001
+  gamma: 0.99
+  batch_size: 32
+  replay_capacity: 4096
+  min_replay_size: 128
+  target_sync_steps: 100
+  update_frequency: 1
+  max_epochs: 16
+  patience: 5
+  epsilon_start: 1.0
+  epsilon_end: 0.05
+  epsilon_decay_steps: 3000
+  warmstart_epochs: 4
+  warmstart_lr: 0.001
+  device: cpu
+
+moe_gate:
+  hidden_dim: 96
+  lr: 0.001
+  max_epochs: 16
+  patience: 5
+  weight_decay: 0.00001
+  device: cpu
+  score_normalization: rank
+
+teacher:
+  lp_teacher_steps_per_topology: 8
+  lp_teacher_time_limit_sec: 20
+  heuristic_weights:
+    topk: 1.0
+    bottleneck: 1.2
+    sensitivity: 1.2
+    lp_opt: 1.5
+
+curriculum:
+  scale_probe_steps: 120
+  regime_targets:
+    C1: 0.9
+    C2: 1.3
+    C3: 1.8
+  stages:
+    - name: stage1_c2
+      regimes: [C2]
+      reward_stage: A
+      max_epochs: 5
+    - name: stage2_c3
+      regimes: [C3]
+      reward_stage: B
+      max_epochs: 5
+    - name: stage3_mixed
+      regimes: [C1, C2, C3]
+      reward_stage: C
+      max_epochs: 6
+
+reward:
+  w_mlu: 1.5
+  w_delay: 1.0
+  w_dist: 0.4
+  w_loss: 1.0
+  w_fail: 1.0
+  w_feas: 0.1
+  w_thr: 0.3
+  w_jit: 0.2

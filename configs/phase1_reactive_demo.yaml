@@ -1,0 +1,97 @@
+registry_config: configs/phase1_reactive_topologies.yaml
+
+experiment:
+  seed: 42
+  max_steps: 180
+  k_paths: 3
+  k_crit: 24
+  drl_method: both
+  split:
+    train: 0.70
+    val: 0.15
+    test: 0.15
+  lp_time_limit_sec: 20
+  full_mcf_time_limit_sec: 60
+  optimality_eval_steps: 20
+  output_dir: results/phase1_reactive
+  train_topologies:
+    - abilene_backbone
+    - geant_core
+  eval_topologies:
+    - abilene_backbone
+    - geant_core
+  generalization_topologies:
+    - germany50_real
+  methods:
+    - ospf
+    - ecmp
+    - topk
+    - bottleneck
+    - sensitivity
+    - erodrl
+    - flexdate
+    - cfrrl
+    - flexentry
+    - our_drl_ppo
+    - our_drl_dqn
+    - lp_optimal
+  failure_types:
+    - single_link_failure
+    - capacity_degradation
+    - multi_link_stress
+  failure_start_frac: 0.33
+  allow_synthetic_topologies: []
+
+traffic_generator:
+  name: mgm
+  steps: 180
+  seed: 42
+  base_scale: 120.0
+  diurnal_period: 96
+  weekly_period: 672
+  modulation_strength: 0.25
+  noise_std: 0.08
+  hotspot_frac: 0.1
+
+drl:
+  hidden_dim: 128
+  actor_lr: 0.0003
+  critic_lr: 0.001
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_ratio: 0.2
+  entropy_coef: 0.01
+  value_coef: 0.5
+  ppo_epochs: 6
+  minibatch_size: 64
+  max_epochs: 12
+  patience: 4
+  warmstart_epochs: 3
+  warmstart_lr: 0.001
+  device: cpu
+
+dqn:
+  hidden_dim: 128
+  lr: 0.001
+  gamma: 0.99
+  batch_size: 32
+  replay_capacity: 2048
+  min_replay_size: 128
+  target_sync_steps: 100
+  update_frequency: 1
+  max_epochs: 12
+  patience: 4
+  epsilon_start: 1.0
+  epsilon_end: 0.05
+  epsilon_decay_steps: 2000
+  warmstart_epochs: 3
+  warmstart_lr: 0.001
+  device: cpu
+
+reward:
+  w_mlu: 1.5
+  w_delay: 1.0
+  w_dist: 0.4
+  w_loss: 1.0
+  w_fail: 1.0
+  w_feas: 0.1

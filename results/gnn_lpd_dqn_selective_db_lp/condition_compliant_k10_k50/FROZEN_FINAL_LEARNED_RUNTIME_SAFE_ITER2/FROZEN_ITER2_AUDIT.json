@@ -1,0 +1,17 @@
+{
+  "frozen_result": "Topology-agnostic bottleneck-ranking DDQN runtime-safe learned controller (Iter2)",
+  "flags": {
+    "all_reported_PR_ge_0.90": true,
+    "all_mean_decision_ms_lt_500": true,
+    "all_p95_decision_ms_lt_500": true,
+    "topology_one_hot_used": false,
+    "topology_specific_K": false,
+    "no_RF": true,
+    "no_full_OD": true,
+    "nonselected_ODs_ECMP": true,
+    "argmax_Q_action_selection": true,
+    "forced_actuator_used_for_final": false,
+    "real_DDQN_audit_pass": true
+  },
+  "source": "FINAL_LEARNED_4OF5_ITER2_DDQN"
+}

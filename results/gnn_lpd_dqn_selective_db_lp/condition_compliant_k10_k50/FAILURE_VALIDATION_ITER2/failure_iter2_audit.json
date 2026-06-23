@@ -1,0 +1,25 @@
+{
+  "method": "Topology-Agnostic Bottleneck-Ranking DDQN (Iter2)",
+  "controller": "Double-DQN argmax-Q",
+  "no_RF": true,
+  "no_full_OD_LP": true,
+  "nonselected_ODs": "ECMP",
+  "bottleneck_ranking": true,
+  "scenarios": [
+    "normal",
+    "single_link_failure",
+    "two_link_failure",
+    "three_link_failure",
+    "random_link_failure_1",
+    "random_link_failure_2",
+    "spike",
+    "mixed_spike_failure",
+    "capacity_degradation_50"
+  ],
+  "topologies": [
+    "abilene",
+    "geant"
+  ],
+  "cycles_per_scenario": 20,
+  "note": "Real failure rerun on the frozen Iter2 controller."
+}

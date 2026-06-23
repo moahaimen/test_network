@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphstruct.org/graphml">
+  <graph id="Cernet" edgedefault="undirected">
+    <!-- Stub: actual data in data/processed/cernet.npz -->
+  </graph>
+</graphml>

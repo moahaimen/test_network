@@ -1,0 +1,9 @@
+{
+  "env_steps": 21120,
+  "td_updates": 20620,
+  "target_updates": 42,
+  "replay_pushes": 21120,
+  "explore_actions": 8643,
+  "greedy_actions": 12477,
+  "ce_updates": 0
+}

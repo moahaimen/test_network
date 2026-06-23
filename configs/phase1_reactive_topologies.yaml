@@ -1,0 +1,94 @@
+topologies:
+  - key: abilene_backbone
+    dataset_key: abilene
+    display_name: "Abilene Backbone (SNDlib)"
+    source: sndlib
+    topology_file: data/raw/topology/abilene.txt
+    processed_file: abilene.npz
+    traffic_mode: real_sndlib
+    expected_num_nodes: 12
+    expected_num_edges: 30
+
+  - key: geant_core
+    dataset_key: geant
+    display_name: "GEANT Core (SNDlib)"
+    source: sndlib
+    topology_file: data/raw/topology/geant.txt
+    processed_file: geant.npz
+    traffic_mode: real_sndlib
+    expected_num_nodes: 22
+    expected_num_edges: 72
+
+  - key: germany50_real
+    dataset_key: germany50
+    display_name: "Germany50 (SNDlib real traffic)"
+    source: sndlib
+    topology_file: data/raw/topology/germany50.txt
+    processed_file: germany50.npz
+    traffic_mode: real_sndlib
+    expected_num_nodes: 50
+    expected_num_edges: 176
+
+  - key: ebone
+    dataset_key: rocketfuel_ebone
+    display_name: "Ebone (Rocketfuel)"
+    source: rocketfuel
+    topology_file: data/rocketfuel/ebone.txt
+    processed_file: rocketfuel_ebone.npz
+    traffic_mode: generator_optional
+    generator_name: mgm
+    expected_num_nodes: 23
+    expected_num_edges: 76
+
+  - key: sprintlink
+    dataset_key: rocketfuel_sprintlink
+    display_name: "Sprintlink (Rocketfuel)"
+    source: rocketfuel
+    topology_file: data/rocketfuel/sprintlink.txt
+    processed_file: rocketfuel_sprintlink.npz
+    traffic_mode: generator_optional
+    generator_name: mgm
+    expected_num_nodes: 44
+    expected_num_edges: 166
+
+  - key: tiscali
+    dataset_key: rocketfuel_tiscali
+    display_name: "Tiscali (Rocketfuel)"
+    source: rocketfuel
+    topology_file: data/rocketfuel/tiscali.txt
+    processed_file: rocketfuel_tiscali.npz
+    traffic_mode: generator_optional
+    generator_name: mgm
+    expected_num_nodes: 49
+    expected_num_edges: 172
+
+  - key: germany50_topologyzoo_real
+    dataset_key: topologyzoo_germany50_real
+    display_name: "Germany50 (TopologyZoo) real traffic"
+    source: topologyzoo
+    topology_file: data/topologyzoo/Germany50.graphml
+    processed_file: topologyzoo_germany50_real.npz
+    traffic_mode: external_real
+    tm_file: data/raw/traffic/germany50_topologyzoo_tm.npz
+    expected_num_nodes: 50
+    expected_num_edges: 176
+
+  - key: vtlwavenet2011
+    dataset_key: topologyzoo_vtlwavenet2011
+    display_name: "VtlWavenet2011 (TopologyZoo)"
+    source: topologyzoo
+    topology_file: data/topologyzoo/VtlWavenet2011.graphml
+    processed_file: topologyzoo_vtlwavenet2011.npz
+    traffic_mode: generator_optional
+    generator_name: mgm
+    expected_num_nodes: 92
+    expected_num_edges: 192
+
+  - key: cernet_real
+    dataset_key: cernet
+    display_name: "CERNET real traffic"
+    source: topologyzoo
+    topology_file: data/raw/topology/cernet.graphml
+    processed_file: cernet.npz
+    traffic_mode: external_real
+    tm_file: data/raw/traffic/cernet_tm.npz

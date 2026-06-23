@@ -1,0 +1,6 @@
+Topology,Target_PR,Our_PR,Target_DB,Our_DB,mean_ms,p95_ms,Win
+abilene,0.958,0.9843,0.0513,0.0058,10.7,20.4,True
+cernet,0.975,0.9925,0.0183,0.0002,46.1,120.7,True
+geant,0.995,0.9983,0.0296,0.003,66.6,121.1,True
+sprintlink,0.999,0.996,0.051,0.0034,174.8,278.8,False
+tiscali,not scored / no valid reference,0.9522,n/a,0.002,76.8,298.4,not scored

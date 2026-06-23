@@ -1,0 +1,30 @@
+# Final Learned 4/5 — Audit
+
+- controller_type = Double-DQN
+- topology_one_hot_used = False
+- topology_id_used = False
+- bottleneck_ranking_used = True
+- action_specific_k_paths_used = True
+- k_paths_rule_is_topology_specific = False
+- k_paths_rule = K50/K100/K200/K300 -> 8 paths ; K500/K800 -> 4 paths (keyed to action size)
+- ranking_uses_oracle = False
+- ranking_uses_pathopt = False
+- ranking_uses_future = False
+- argmax_Q_action_selection = True
+- forced_actuator_used_for_final = False
+- RandomForest_used = False
+- full_OD_LP_used = True
+- topology_specific_K = False
+- topology_specific_threshold = False
+- nonselected_ODs_ECMP = True
+- uses_optimal_at_inference = False
+- uses_pathopt_at_inference = False
+- uses_oracle_labels_at_inference = False
+- replay_buffer_used = True
+- epsilon_greedy_used = True
+- td_loss_used = True
+- double_dqn_target_used = True
+- cross_entropy_supervised_only = False
+- target_update_used = True
+- state_dim = 33
+- runtime_counters = {'env_steps': 21120, 'td_updates': 20620, 'target_updates': 42, 'replay_pushes': 21120, 'explore_actions': 8643, 'greedy_actions': 12477, 'ce_updates': 0}

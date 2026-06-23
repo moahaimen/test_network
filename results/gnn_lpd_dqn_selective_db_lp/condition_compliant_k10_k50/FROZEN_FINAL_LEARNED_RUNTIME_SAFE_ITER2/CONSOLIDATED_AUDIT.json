@@ -1,0 +1,50 @@
+{
+  "final_learned_runtime_safe_controller": "Topology-agnostic bottleneck-ranking DDQN (Iter2)",
+  "runtime_safe_flags": {
+    "all_reported_PR_ge_0.90": true,
+    "all_mean_decision_ms_lt_500": true,
+    "all_p95_decision_ms_lt_500": true,
+    "topology_one_hot_used": false,
+    "topology_specific_K": false,
+    "no_RF": true,
+    "no_full_OD": true,
+    "nonselected_ODs_ECMP": true,
+    "argmax_Q_action_selection": true,
+    "forced_actuator_used_for_final": false,
+    "real_DDQN_audit_pass": true
+  },
+  "learned_FlexDATE_wins": "3/4 (Abilene, CERNET, GEANT)",
+  "sprintlink_learned_PR": 0.996,
+  "sprintlink_FlexDATE_target": 0.999,
+  "sprintlink_learned_meets_0p999": false,
+  "sprintlink_deployable_route_verified": true,
+  "sprintlink_deployable_best": {
+    "bottleneck_K800_kpaths8": {
+      "PR": 0.9993,
+      "DB": 0.0006,
+      "mean_ms": 379.5,
+      "p95_ms": 439.4
+    },
+    "bottleneck_K1200_kpaths4": {
+      "PR": 1.0,
+      "DB": 0.0005,
+      "mean_ms": 314.7,
+      "p95_ms": 363.1
+    }
+  },
+  "deployable_route_is_learned_claim": false,
+  "controller_type": "Double-DQN",
+  "topology_one_hot_used": false,
+  "topology_specific_K": false,
+  "no_RF": true,
+  "no_full_OD": true,
+  "nonselected_ODs_ECMP": true,
+  "argmax_Q_action_selection": true,
+  "forced_actuator_used_for_final": false,
+  "uses_optimal_at_inference": false,
+  "other_frozen_results": {
+    "strict_K50_DDQN": "results/.../STRICT_FULL_MCF_PR (strict full-MCF PR; 3/4 FlexDATE at K<=50)",
+    "runtime_safe_topology_agnostic_v1": "FROZEN_RUNTIME_SAFE_TOPO_AGNOSTIC_DDQN (all PR>=0.90, <500ms)",
+    "sprintlink_4of5_search": "SPRINTLINK_4OF5_SEARCH (deployable route verification)"
+  }
+}

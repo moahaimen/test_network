@@ -1,0 +1,139 @@
+experiment:
+  data_dir: data
+  workspace_root: .
+  max_steps: 500
+  k_paths: 3
+  k_crit: 40
+  lp_time_limit_sec: 20
+  full_mcf_time_limit_sec: 90
+  scale_probe_steps: 200
+  k_crit_mode: adaptive_edges
+  k_crit_fixed: 40
+  k_crit_alpha_edges: 1.0
+  k_crit_beta_ods: 0.05
+  k_crit_min: 20
+  k_crit_max: 200
+  lp_runtime_budget_sec: 0.30
+  split:
+    train: 0.70
+    val: 0.15
+    test: 0.15
+  regimes:
+    C2: 1.3
+    C3: 1.8
+
+mgm:
+  steps: 500
+  seed: 42
+  base_scale: 120.0
+  diurnal_period: 96
+  weekly_period: 672
+  modulation_strength: 0.25
+  noise_std: 0.08
+  hotspot_frac: 0.10
+
+topologies:
+  - key: abilene
+    source: sndlib
+    tm_source: real
+    topology_file: data/raw/topology/abilene.txt
+    max_steps: 500
+    topology_id: SNDLIB_ABILENE
+    display_name: "Abilene Backbone (SNDlib)"
+    expected_num_nodes: 12
+    expected_num_edges: 30
+    k_crit_mode: adaptive_edges
+    k_crit_alpha_edges: 1.0
+    k_crit_min: 20
+    k_crit_max: 200
+    lp_runtime_budget_sec: 0.30
+
+  - key: geant
+    source: sndlib
+    tm_source: real
+    topology_file: data/raw/topology/geant.txt
+    max_steps: 500
+    topology_id: SNDLIB_GEANT
+    display_name: "GEANT Core (SNDlib)"
+    expected_num_nodes: 22
+    expected_num_edges: 72
+    k_crit_mode: adaptive_edges
+    k_crit_alpha_edges: 1.0
+    k_crit_min: 20
+    k_crit_max: 200
+    lp_runtime_budget_sec: 0.30
+
+  - key: rocketfuel_sprintlink
+    source: rocketfuel
+    tm_source: mgm
+    topology_file: data/rocketfuel/sprintlink.txt
+    max_steps: 500
+    topology_id: ROCKETFUEL_SPRINTLINK
+    display_name: "Sprintlink (Rocketfuel)"
+    expected_num_nodes: 44
+    expected_num_edges: 166
+    k_crit_mode: adaptive_edges
+    k_crit_alpha_edges: 1.0
+    k_crit_min: 20
+    k_crit_max: 200
+    lp_runtime_budget_sec: 0.30
+
+  - key: rocketfuel_tiscali
+    source: rocketfuel
+    tm_source: mgm
+    topology_file: data/rocketfuel/tiscali.txt
+    max_steps: 500
+    topology_id: ROCKETFUEL_TISCALI
+    display_name: "Tiscali (Rocketfuel)"
+    expected_num_nodes: 49
+    expected_num_edges: 172
+    k_crit_mode: adaptive_edges
+    k_crit_alpha_edges: 1.0
+    k_crit_min: 20
+    k_crit_max: 200
+    lp_runtime_budget_sec: 0.30
+
+  - key: rocketfuel_ebone
+    source: rocketfuel
+    tm_source: mgm
+    topology_file: data/rocketfuel/ebone.txt
+    max_steps: 500
+    topology_id: ROCKETFUEL_EBONE
+    display_name: "Ebone (Rocketfuel)"
+    expected_num_nodes: 23
+    expected_num_edges: 76
+    k_crit_mode: adaptive_edges
+    k_crit_alpha_edges: 1.0
+    k_crit_min: 20
+    k_crit_max: 200
+    lp_runtime_budget_sec: 0.30
+
+  - key: topologyzoo_vtlwavenet2011
+    source: topologyzoo
+    tm_source: mgm
+    topology_file: data/topologyzoo/VtlWavenet2011.graphml
+    max_steps: 500
+    topology_id: TOPOLOGYZOO_VTLWAVENET2011
+    display_name: "VtlWavenet2011 (TopologyZoo)"
+    expected_num_nodes: 92
+    expected_num_edges: 192
+    k_crit_mode: adaptive_edges
+    k_crit_alpha_edges: 1.0
+    k_crit_min: 20
+    k_crit_max: 200
+    lp_runtime_budget_sec: 0.30
+
+  - key: topologyzoo_germany50
+    source: topologyzoo
+    tm_source: mgm
+    topology_file: data/topologyzoo/Germany50.graphml
+    max_steps: 500
+    topology_id: TOPOLOGYZOO_GERMANY50
+    display_name: "Germany50 (TopologyZoo)"
+    expected_num_nodes: 50
+    expected_num_edges: 176
+    k_crit_mode: adaptive_edges
+    k_crit_alpha_edges: 1.0
+    k_crit_min: 20
+    k_crit_max: 200
+    lp_runtime_budget_sec: 0.30

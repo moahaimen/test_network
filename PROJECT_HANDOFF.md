@@ -47,10 +47,21 @@ Search/actuator-verified (not a learned-policy claim):
 ### VtlWavenet robust (extended 40 -> 200 TMs, real rerun)
 Mean PR 0.9340, PR>=0.90 = 100%, Min PR 0.9251, mean 326 ms, **p95 640 ms (> 500 on the full sample)**.
 
-### Failure scenarios (real rerun on current controller; Abilene + GEANT, 9 scenarios x 20 cycles)
-- Holds PR>=0.99 in most scenarios; roughly halves MLU vs ECMP.
-- Weak points (honest): Abilene two-link failure PR 0.8965 (<0.90); Abilene three-link disconnects 3 OD pairs
-  (physical partition); GEANT failure-mode decision time > 500 ms. The <500 ms guarantee is normal-traffic only.
+### Failure scenarios (real rerun on current controller; ALL 8 topologies, 9 scenarios x 20 cycles = 72 runs)
+Script `run_failure_all8.py`; results in `FAILURE_VALIDATION_ITER2_ALL8/`. Worst-PR per topo under failure:
+Abilene 0.8965, GEANT 0.990, CERNET 0.972, Sprintlink 0.994, Tiscali 0.934, Ebone 1.000, Germany50 0.965,
+VtlWavenet 0.920. Reduces MLU vs ECMP in every scenario.
+- Weak points (honest): Abilene two-link failure PR 0.8965 (<0.90) + three-link disconnects 3 OD pairs (partition).
+  VtlWavenet (8372 ODs, zero-shot) exceeds 500 ms in several failure scenarios (max 514 ms) and multi-link failures
+  disconnect 3-14 ODs. The <500 ms guarantee is normal-traffic only; under failure the largest topologies can
+  exceed it. (Old 2-topo `FAILURE_VALIDATION_ITER2/` superseded.)
+
+### Decision-time correction (KEEP cycles)
+The eval logged KEEP cycles as a 0.5 ms placeholder, omitting the GNN scorer + feature + DDQN forward cost a KEEP
+cycle actually pays. Report now charges KEEP = topology GNN inference cost (+0.5). Corrected per-topo means: Ebone
+3.0->14.1, Tiscali 76.8->99.3, CERNET 46.1->56.2, Abilene 10.7->11.6 (others 0% KEEP, unchanged). ALL still <500 ms
+mean & p95. The misleading pooled-by-action decision-time table was replaced with a per-topology table (LP cost is
+driven by topology size, not the K label). Fixed in `build_final_docx.py`.
 
 ### Proof of learning (trained vs untrained vs random)
 - Training curve: TD loss 2.10 -> 0.64, reward 15.16 -> 18.03, epsilon 0.94 -> 0.05.

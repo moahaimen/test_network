@@ -142,6 +142,24 @@ para("Eight topologies are evaluated: Abilene, GEANT, CERNET, Sprintlink, Tiscal
      "traffic matrix, the controller selects an action by argmax-Q, the selected-flow LP optimizes the selected "
      "top-K OD pairs (nonselected remain ECMP), and PR, DB, MLU, and per-cycle decision time are recorded. "
      "Evaluation uses carry-forward routing: KEEP reuses the previously accepted routing.")
+para("Dataset and train/test split. Seen topologies use a disjoint train/test split: the controller is trained on "
+     "the train partition only and the report evaluates exclusively on the held-out test partition (the N column "
+     "below and in all result tables is the TEST count, never the training cycles). Germany50 and VtlWavenet have "
+     "no train partition - they are evaluated entirely zero-shot. Training additionally sampled at most 160 cycles "
+     "per seen topology per episode (TRAIN_CAP=160) from the train partition, over 22 episodes x 6 seen topologies.",
+     size=9.5)
+table(["Topology","Type","Total TMs in dataset","Train partition","Test = report N","Notes"],
+ [["Abilene","seen","4032","2016 (idx 0-2015)","2016 (idx 2016-4031)","50/50 split"],
+  ["GEANT","seen","1344","672 (idx 0-671)","672 (idx 672-1343)","50/50 split"],
+  ["CERNET","seen","500","200 (idx 0-199)","200 (idx 200-399)","100 TMs unused"],
+  ["Sprintlink","seen","500","200","200","100 TMs unused"],
+  ["Tiscali","seen","500","200","200","100 TMs unused"],
+  ["Ebone","seen","500","200","200","100 TMs unused"],
+  ["Germany50","zero-shot","288","none","288 (all)","never trained on"],
+  ["VtlWavenet","zero-shot","500","none","40 (frozen) / 200 (robust run)","never trained on; 40 of 500 used in frozen eval"]],
+  fontsz=7.5)
+para("Total cycles evaluated in this report = 2016 + 672 + 200x4 + 288 + 40 = 3816 (test halves of the six seen "
+     "topologies plus the two zero-shot sets), matching the per-cycle evaluation CSV exactly.", italic=True, size=8.5)
 
 # 3. Final Learned Method
 h1("3. Final Learned Method")

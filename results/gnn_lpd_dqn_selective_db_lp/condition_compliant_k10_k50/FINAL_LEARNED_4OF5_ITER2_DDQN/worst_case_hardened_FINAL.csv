@@ -1,0 +1,5 @@
+topology,flexdate_worst,min_pr_frozen,min_pr_hardened,k_floor,mean_pr,mean_ms,p95_ms,mean_db,cleared
+abilene,0.87,0.781,0.9656,K300,1.0,23.0,24.7,0.007,True
+geant,0.87,0.991,0.9998,K300,1.0,93.9,145.6,0.0024,True
+sprintlink,0.976,0.96,0.9768,K300,0.9965,206.0,271.7,0.0045,True
+tiscali,0.932,0.8928,0.9349,K800,0.9754,284.5,365.2,0.0036,True

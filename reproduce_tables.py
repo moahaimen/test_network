@@ -64,6 +64,10 @@ acts=["KEEP","K50","K100","K200","K300","K500","K800"]
 rows=[[a,len(pc[pc.action==a]),round(pc[pc.action==a].decision_ms.mean(),1),round(np.percentile(pc[pc.action==a].decision_ms,95),1),round(pc[pc.action==a].decision_ms.max(),1)] for a in acts if len(pc[pc.action==a])]
 show(pd.DataFrame(rows, columns=["Action","Rows","Mean_ms","P95_ms","Max_ms"]), "Decision time by action type (pooled)")
 
+# 7d. Worst-case hardening (Tier B)
+if (CSV/"worst_case_hardened_FINAL.csv").exists():
+    show(pd.read_csv(CSV/"worst_case_hardened_FINAL.csv"), "Worst-case hardening Tier B (clears FlexDATE worst-case on all 4, <500ms)")
+
 # 8. Ranking ablation
 if (CSV/"rank_ablation.csv").exists(): show(pd.read_csv(CSV/"rank_ablation.csv"), "Ranking ablation (gnn-only vs relief-only vs blend)")
 

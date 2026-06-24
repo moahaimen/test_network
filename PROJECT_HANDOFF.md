@@ -59,6 +59,26 @@ Mean PR 0.9340, PR>=0.90 = 100%, Min PR 0.9251, mean 326 ms, **p95 640 ms (> 500
 
 ---
 
+## 2b. Worst-case hardening (Tier B) — clears FlexDATE worst-case on all 4
+The frozen learned controller (Tier A) leans on KEEP/small-K for low runtime, leaving a few hard/cold-start
+cycles with low worst-case PR (GEANT first cycle 0.5848, Abilene 0.8109, Sprintlink 0.9600, Tiscali 0.8928 —
+all below FlexDATE's reported worst-case). A second operating point, **Tier B**, hardens the worst case with
+three GLOBAL deployment rules on the SAME argmax-Q model: (1) first-cycle full optimization (db=1.0);
+(2) never KEEP -> always optimize; (3) min-K floor + larger DB budget (0.15). Result (scripts:
+`worst_case_harden.py`, `geant_worstcase_fix.py`; CSV `worst_case_hardened_FINAL.csv`):
+
+| Topo | FlexDATE worst | Tier A Min PR | **Tier B Min PR** | mean PR | mean ms | p95 ms | mean DB | K-floor |
+|---|---|---|---|---|---|---|---|---|
+| Abilene | 0.870 | 0.8109 | **0.9656** | 1.0000 | 23.0 | 24.7 | 0.0070 | K300 |
+| GEANT | 0.870 | 0.5848 | **0.9998** | 1.0000 | 93.9 | 145.6 | 0.0024 | K300 |
+| Sprintlink | 0.976 | 0.9600 | **0.9768** | 0.9965 | 206.0 | 271.7 | 0.0045 | K300 |
+| Tiscali | 0.932 | 0.8928 | **0.9349** | 0.9754 | 284.5 | 365.2 | 0.0036 | **K800** |
+
+All four clear FlexDATE's worst-case, all <500 ms (mean & p95), DB far under targets. **Honest trade-off:**
+Tier B optimizes every cycle (no KEEP) so mean runtime rises vs Tier A (Sprintlink 174.8->206; Tiscali 76.8->284.5);
+it is a worst-case-safe tier, NOT the runtime-efficient learned policy. Tiscali (2352 ODs) needs the K800 floor.
+Documented in the report Section 8b.
+
 ## 3. Min-PR note (a question that came up)
 Low Min PR values (e.g., Germany50 0.4090, GEANT 0.5848) are the **first warm-up cycles**: the controller
 starts from ECMP and the DB-budgeted LP converges over ~4-5 cycles. Mean/Median/PR>=0.90 are excellent and

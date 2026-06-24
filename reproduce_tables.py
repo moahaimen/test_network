@@ -71,8 +71,11 @@ if (CSV/"worst_case_hardened_FINAL.csv").exists():
 # 8. Ranking ablation
 if (CSV/"rank_ablation.csv").exists(): show(pd.read_csv(CSV/"rank_ablation.csv"), "Ranking ablation (gnn-only vs relief-only vs blend)")
 
-# 9. Failure
-if (CSV/"failure_iter2_summary.csv").exists():
+# 9. Failure (prefer all-8-topology rerun)
+if (CSV/"failure_all8_summary.csv").exists():
+    show(pd.read_csv(CSV/"failure_all8_summary.csv"), "Failure scenarios (ALL 8 topologies, 9 scenarios x 20 cycles = 72 runs)")
+    show(pd.read_csv(CSV/"failure_all8_disconnect_detail.csv"), "Failure: disconnected-OD detail (all 8 topologies)")
+elif (CSV/"failure_iter2_summary.csv").exists():
     show(pd.read_csv(CSV/"failure_iter2_summary.csv"), "Failure scenarios (Abilene + GEANT, 9 scenarios x 20 cycles)")
     show(pd.read_csv(CSV/"failure_iter2_disconnect_detail.csv"), "Failure: disconnected-OD detail")
 

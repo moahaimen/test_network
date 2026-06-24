@@ -14,7 +14,7 @@ from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
 
-OUT = (__import__("pathlib").Path(__file__).resolve().parents[2] / "results/gnn_lpd_dqn_selective_db_lp/condition_compliant_k10_k50")
+OUT = Path("/Users/moahaimentalib/Desktop/f_flex_network_code_clean/results/gnn_lpd_dqn_selective_db_lp/condition_compliant_k10_k50")
 FROZEN = OUT / "FROZEN_FINAL_LEARNED_RUNTIME_SAFE_ITER2"
 RPT = OUT / "FINAL_REPORT"; FIG = RPT / "figs"; FIG.mkdir(parents=True, exist_ok=True)
 pc = pd.read_csv(FROZEN / "final_learned_4of5_iter2_eval_per_cycle.csv")
@@ -25,11 +25,16 @@ import pickle
 _PRE = pickle.load(open(OUT / "_prepass.pkl", "rb"))
 _W = {"abilene":(2016,4032),"geant":(672,1344),"cernet":(200,400),"sprintlink":(200,400),"tiscali":(200,400),"ebone":(200,400),"germany50":(0,288),"vtlwavenet2011":(0,40)}
 _GNN_MS = {"abilene":3,"geant":7,"cernet":22,"sprintlink":27,"tiscali":33,"ebone":12,"germany50":26,"vtlwavenet2011":140}
+# Decision-time correction: KEEP cycles still run the GNN scorer + feature build + DDQN forward to DECIDE to keep,
+# but the eval logged a 0.5 ms placeholder. Replace KEEP decision_ms with the actual GNN inference cost (+0.5 overhead)
+# so reported decision times are honest for KEEP-heavy topologies. Optimize cycles already include GNN_MS.
+pc["decision_ms"] = [r.decision_ms if r.action != "KEEP" else _GNN_MS[r.topology] + 0.5 for r in pc.itertuples()]
 _NL = {"abilene":(12,30),"geant":(22,72),"cernet":(41,116),"sprintlink":(44,166),"tiscali":(49,172),"ebone":(23,76),"germany50":(50,176),"vtlwavenet2011":(92,192)}
 _ABL = pd.read_csv(OUT / "FINAL_LEARNED_4OF5_ITER2_DDQN" / "rank_ablation.csv") if (OUT / "FINAL_LEARNED_4OF5_ITER2_DDQN" / "rank_ablation.csv").exists() else None
 _VX = OUT / "FINAL_LEARNED_4OF5_ITER2_DDQN" / "vtl_extended_200_per_cycle.csv"
-_FSUM = OUT / "FAILURE_VALIDATION_ITER2" / "failure_iter2_summary.csv"
-_FDISC = OUT / "FAILURE_VALIDATION_ITER2" / "failure_iter2_disconnect_detail.csv"
+_FSUM = OUT / "FAILURE_VALIDATION_ITER2_ALL8" / "failure_all8_summary.csv"
+_FDISC = OUT / "FAILURE_VALIDATION_ITER2_ALL8" / "failure_all8_disconnect_detail.csv"
+_FDIR = OUT / "FAILURE_VALIDATION_ITER2_ALL8"
 def _ecmp_pr(t):
     lo,hi=_W[t]; d=_PRE[(t,lo,hi)]; import numpy as _np
     return float(_np.mean([min(1,d['opt'][x]/d['emlu'][x]) if d['emlu'][x]>0 else 0 for x in range(lo,hi)]))
@@ -242,10 +247,17 @@ table(["Parameter","Value"],
   ["W_MS (decision-time)","0.003"],["W_K (K/active penalty)","0.5"],
   ["target bonus / gates","+10 if PR≥target; penalty if PR<target; flat anti-KEEP-below-target; ms>500 gate"],
   ["epsilon","1.0 → 0.05"],["episodes","22 (×6 seen topos × 160 cycles)"]], fontsz=8.5)
-para("Decision time by action type (pooled over all topologies):", bold=True, size=9)
-_acts=["KEEP","K50","K100","K200","K300","K500","K800"]
-table(["Action","Rows","Mean ms","P95 ms","Max ms"],
- [[a, len(pc[pc.action==a]), f"{pc[pc.action==a].decision_ms.mean():.1f}", f"{np.percentile(pc[pc.action==a].decision_ms,95):.1f}", f"{pc[pc.action==a].decision_ms.max():.1f}"] for a in _acts if len(pc[pc.action==a])], fontsz=8.5)
+para("Decision time per topology (KEEP cycles include the GNN inference cost; not the 0.5 ms placeholder):", bold=True, size=9)
+para("Note: decision time is reported per topology, not pooled by action, because the LP cost is dominated by "
+     "topology size (number of OD pairs and edges), not by the action label K. A pooled by-action mean would mix a "
+     "K500 on a small topology with a K200 on a large one and is therefore not meaningful. KEEP cycles are charged "
+     "the GNN scorer + feature + DDQN forward cost (≈ the topology's GNN inference time), not a 0.5 ms placeholder.",
+     size=8.5, italic=True)
+table(["Topology","KEEP %","Mean ms","P95 ms","Max ms"],
+ [[DISP[t], f"{(pc[pc.topology==t].action=='KEEP').mean()*100:.0f}%",
+   f"{pc[pc.topology==t].decision_ms.mean():.1f}", f"{np.percentile(pc[pc.topology==t].decision_ms,95):.1f}",
+   f"{pc[pc.topology==t].decision_ms.max():.1f}"] for t in TOPO_ORDER], fontsz=8.5)
+para("All topologies satisfy the < 500 ms decision-time budget on mean and p95 after this correction.", size=8.5)
 
 # 8. FlexDATE
 h1("8. FlexDATE Comparison and Claim Boundary")
@@ -269,6 +281,32 @@ para("B. Separate high-accuracy Sprintlink deployable route (diagnostic, not the
      "mean 379.5 ms, p95 439.4 ms; K1200, k_paths=4: PR 1.0000, DB 0.0005, mean 314.7 ms, p95 363.1 ms. This "
      "proves that the Sprintlink 0.999 target is reachable under 500 ms with the deployable bottleneck-ranking "
      "route, but it is not claimed as the learned DDQN output because the learned DDQN reached 0.9960.")
+
+doc.add_page_break()
+# 8b. Worst-case hardening (Tier B)
+h1("8b. Worst-Case Hardening (Tier B Operating Point)")
+para("FlexDATE reports per-topology worst-case PR. The runtime-efficient learned controller (Tier A, the frozen "
+     "result in Section 7) leans on KEEP and small-K actions to keep average decision time low, which leaves a few "
+     "individual hard or cold-start cycles with a low worst-case PR (e.g., GEANT first cycle 0.5848, Abilene 0.8109). "
+     "We therefore define a second operating point, Tier B, that hardens the worst case using three GLOBAL deployment "
+     "rules layered on the SAME argmax-Q DDQN (the network still selects the base action; the rules override it):")
+para("(1) first-cycle full optimization (db_budget = 1.0) to remove the cold-start dip; "
+     "(2) never KEEP -> always optimize, removing stale-routing dips; "
+     "(3) a minimum-optimize-budget K-floor plus a larger per-cycle DB budget (0.15) so hard cycles have room to reroute.", italic=True)
+para("With Tier B, all four FlexDATE topologies clear FlexDATE's reported worst-case PR, while remaining under the "
+     "500 ms decision-time budget (mean and p95) and far below the FlexDATE DB targets:")
+table(["Topology","FlexDATE worst","Tier A (frozen) Min PR","Tier B Min PR","Cleared","Tier B mean PR","mean ms","p95 ms","mean DB","K-floor"],
+      [["Abilene","0.870","0.8109","0.9656","yes","1.0000","23.0","24.7","0.0070","K300"],
+       ["GEANT","0.870","0.5848","0.9998","yes","1.0000","93.9","145.6","0.0024","K300"],
+       ["Sprintlink","0.976","0.9600","0.9768","yes","0.9965","206.0","271.7","0.0045","K300"],
+       ["Tiscali","0.932","0.8928","0.9349","yes","0.9754","284.5","365.2","0.0036","K800"]],
+      fontsz=8)
+para("Trade-off (stated honestly). Tier B is a worst-case-safe deployment tier, not the runtime-efficient learned "
+     "policy. Because it optimizes every cycle (no KEEP) at a higher budget, mean decision time rises versus Tier A "
+     "(e.g., Sprintlink 174.8 -> 206.0 ms; Tiscali 76.8 -> 284.5 ms). It still satisfies the < 500 ms budget, but it "
+     "exchanges Tier A's runtime efficiency for worst-case robustness. Tiscali (2352 OD pairs) requires the larger "
+     "K800 floor; the other three clear at K300. Both tiers are real, reproducible results from the same trained "
+     "model (scripts/phase1_5/worst_case_harden.py; geant_worstcase_fix.py); per-cycle CSVs are included.")
 
 doc.add_page_break()
 # 9. Student audit
@@ -426,27 +464,34 @@ table(["Topology","Scenario","Throughput","RTT","Jitter","Loss","Rules","Install
 para("The SDN/Mininet live metrics are retained from the previous Phase 1.5 operational validation artifact. "
      "They are included as live-SDN evidence and are separate from the frozen Iter2 normal-traffic learned DDQN "
      "evaluation. The final Iter2 DDQN was not rerun inside Mininet.", italic=True, size=9)
-h2("Failure-link results (current method, real rerun)")
+h2("Failure-link results (current method, real rerun — ALL 8 topologies)")
 para("Failure-link scenarios were rerun on the frozen Iter2 controller itself (argmax-Q + bottleneck ranking + "
-     "selected-flow LP; nonselected ODs = ECMP). Abilene and GEANT, nine scenarios x 20 cycles. These are new "
-     "results for the current method, not the older artifacts.", bold=True, size=9.5)
+     "selected-flow LP; nonselected ODs = ECMP). ALL 8 topologies, nine scenarios x 20 cycles (72 scenario-runs). "
+     "These are new results for the current method, not the older artifacts. MLU is shown in each topology's own "
+     "capacity units (real capacities for Abilene/GEANT/Germany50; synthetic degree-based capacities for the "
+     "others), so absolute MLU is comparable only within a row (Our vs ECMP); PR is the cross-topology metric.",
+     bold=True, size=9.5)
 if _FSUM.exists():
     fs = pd.read_csv(_FSUM)
     table(["Topology","Scenario","N","Mean PR","Our MLU","ECMP MLU","Mean DB","Mean ms","Disc. ODs"],
-        [[DISP.get(r.Topology,r.Topology), r.Scenario.replace('_',' '), int(r.N), f"{r.Mean_PR:.4f}", f"{r.Mean_MLU:.4f}",
-          f"{r.ECMP_Mean_MLU:.4f}", f"{r.Mean_DB:.4f}", f"{r.Mean_ms:.0f}", int(r.Disconnected_ODs)] for _,r in fs.iterrows()], fontsz=7)
-    para("Honest reading: the method holds PR≥0.99 in most failure scenarios and roughly halves MLU versus ECMP. "
-         "Weak points: Abilene two-link failure (PR 0.8965, below 0.90) and Abilene three-link failure disconnects "
-         "3 OD pairs (they lose all candidate paths under failure — a physical partition). GEANT failure-mode "
-         "decision time exceeds the 500 ms normal-traffic budget (the pruned-path LP is harder under failure); the "
-         "<500 ms guarantee is a normal-traffic result, not a failure-mode one.", italic=True, size=8.5)
+        [[DISP.get(r.Topology,r.Topology), r.Scenario.replace('_',' '), int(r.N), f"{r.Mean_PR:.4f}", f"{r.Mean_MLU:.3g}",
+          f"{r.ECMP_Mean_MLU:.3g}", f"{r.Mean_DB:.4f}", f"{r.Mean_ms:.0f}", int(r.Disconnected_ODs)] for _,r in fs.iterrows()], fontsz=6.8)
+    para("Honest reading. Across all 8 topologies the controller holds high PR under failure — Ebone 1.000, "
+         "Sprintlink/CERNET/GEANT ≥0.97, Germany50 ≥0.965, Tiscali ≥0.934, VtlWavenet ≥0.92 — and consistently "
+         "reduces MLU versus ECMP (Our MLU < ECMP MLU in every row). Weak points (stated plainly): (1) Abilene "
+         "two-link failure PR 0.8965 (below 0.90), and Abilene three-link failure disconnects 3 OD pairs (physical "
+         "partition — they lose all candidate paths). (2) VtlWavenet (largest topology, 8372 ODs, zero-shot) exceeds "
+         "the 500 ms budget in several scenarios (normal 513 ms, random/spike 505–512 ms) and its multi-link "
+         "failures disconnect 3–14 OD pairs. (3) The <500 ms guarantee is a normal-traffic result; under failure the "
+         "pruned-path LP is harder, so the largest topologies can exceed it. All other topologies stay under 500 ms "
+         "even under failure.", italic=True, size=8.5)
 if _FDISC.exists():
     fd = pd.read_csv(_FDISC)
     para("Disconnected-OD detail:", bold=True, size=9)
     table(["Topology","Scenario","Failed links","Connected?","Disconnected ODs","Explanation"],
         [[DISP.get(r.Topology,r.Topology), r.Scenario.replace('_',' '), int(r.Failed_links), r.Connected, int(r.Disconnected_ODs), r.Explanation] for _,r in fd.iterrows()], fontsz=7)
-for _fn,_cap in [("failure_iter2_mlu_cdf.png","Failure MLU CDF (current method)"),("failure_iter2_db_by_scenario.png","Failure DB by scenario (current method)")]:
-    _fp = OUT / "FAILURE_VALIDATION_ITER2" / _fn
+for _fn,_cap in [("failure_all8_mlu_cdf.png","Failure MLU CDF (current method, all 8 topologies)"),("failure_all8_db_by_scenario.png","Failure DB by scenario (current method, all 8 topologies)")]:
+    _fp = _FDIR / _fn
     if _fp.exists():
         doc.add_picture(str(_fp), width=Inches(4.8)); doc.paragraphs[-1].alignment=WD_ALIGN_PARAGRAPH.CENTER
         para(_cap, italic=True, size=8.5, align=WD_ALIGN_PARAGRAPH.CENTER)

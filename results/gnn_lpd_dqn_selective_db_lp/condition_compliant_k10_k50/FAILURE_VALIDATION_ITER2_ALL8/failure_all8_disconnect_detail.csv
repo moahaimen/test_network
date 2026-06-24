@@ -1,0 +1,73 @@
+Topology,Scenario,Failed_links,Connected,Disconnected_ODs,Explanation
+abilene,normal,0,yes,0,all ODs keep a surviving path
+abilene,single_link_failure,1,yes,0,all ODs keep a surviving path
+abilene,two_link_failure,2,yes,0,all ODs keep a surviving path
+abilene,three_link_failure,3,partial,3,some ODs lost all candidate paths under failure
+abilene,random_link_failure_1,1,yes,0,all ODs keep a surviving path
+abilene,random_link_failure_2,1,yes,0,all ODs keep a surviving path
+abilene,spike,0,yes,0,all ODs keep a surviving path
+abilene,mixed_spike_failure,1,yes,0,all ODs keep a surviving path
+abilene,capacity_degradation_50,0,yes,0,all ODs keep a surviving path
+geant,normal,0,yes,0,all ODs keep a surviving path
+geant,single_link_failure,1,yes,0,all ODs keep a surviving path
+geant,two_link_failure,2,yes,0,all ODs keep a surviving path
+geant,three_link_failure,3,yes,0,all ODs keep a surviving path
+geant,random_link_failure_1,1,yes,0,all ODs keep a surviving path
+geant,random_link_failure_2,1,yes,0,all ODs keep a surviving path
+geant,spike,0,yes,0,all ODs keep a surviving path
+geant,mixed_spike_failure,1,yes,0,all ODs keep a surviving path
+geant,capacity_degradation_50,0,yes,0,all ODs keep a surviving path
+cernet,normal,0,yes,0,all ODs keep a surviving path
+cernet,single_link_failure,1,yes,0,all ODs keep a surviving path
+cernet,two_link_failure,2,yes,0,all ODs keep a surviving path
+cernet,three_link_failure,3,partial,1,some ODs lost all candidate paths under failure
+cernet,random_link_failure_1,1,yes,0,all ODs keep a surviving path
+cernet,random_link_failure_2,1,yes,0,all ODs keep a surviving path
+cernet,spike,0,yes,0,all ODs keep a surviving path
+cernet,mixed_spike_failure,1,yes,0,all ODs keep a surviving path
+cernet,capacity_degradation_50,0,yes,0,all ODs keep a surviving path
+sprintlink,normal,0,yes,0,all ODs keep a surviving path
+sprintlink,single_link_failure,1,yes,0,all ODs keep a surviving path
+sprintlink,two_link_failure,2,yes,0,all ODs keep a surviving path
+sprintlink,three_link_failure,3,yes,0,all ODs keep a surviving path
+sprintlink,random_link_failure_1,1,yes,0,all ODs keep a surviving path
+sprintlink,random_link_failure_2,1,yes,0,all ODs keep a surviving path
+sprintlink,spike,0,yes,0,all ODs keep a surviving path
+sprintlink,mixed_spike_failure,1,yes,0,all ODs keep a surviving path
+sprintlink,capacity_degradation_50,0,yes,0,all ODs keep a surviving path
+tiscali,normal,0,yes,0,all ODs keep a surviving path
+tiscali,single_link_failure,1,yes,0,all ODs keep a surviving path
+tiscali,two_link_failure,2,yes,0,all ODs keep a surviving path
+tiscali,three_link_failure,3,yes,0,all ODs keep a surviving path
+tiscali,random_link_failure_1,1,yes,0,all ODs keep a surviving path
+tiscali,random_link_failure_2,1,yes,0,all ODs keep a surviving path
+tiscali,spike,0,yes,0,all ODs keep a surviving path
+tiscali,mixed_spike_failure,1,yes,0,all ODs keep a surviving path
+tiscali,capacity_degradation_50,0,yes,0,all ODs keep a surviving path
+ebone,normal,0,yes,0,all ODs keep a surviving path
+ebone,single_link_failure,1,yes,0,all ODs keep a surviving path
+ebone,two_link_failure,2,yes,0,all ODs keep a surviving path
+ebone,three_link_failure,3,yes,0,all ODs keep a surviving path
+ebone,random_link_failure_1,1,yes,0,all ODs keep a surviving path
+ebone,random_link_failure_2,1,yes,0,all ODs keep a surviving path
+ebone,spike,0,yes,0,all ODs keep a surviving path
+ebone,mixed_spike_failure,1,yes,0,all ODs keep a surviving path
+ebone,capacity_degradation_50,0,yes,0,all ODs keep a surviving path
+germany50,normal,0,yes,0,all ODs keep a surviving path
+germany50,single_link_failure,1,yes,0,all ODs keep a surviving path
+germany50,two_link_failure,2,yes,0,all ODs keep a surviving path
+germany50,three_link_failure,3,yes,0,all ODs keep a surviving path
+germany50,random_link_failure_1,1,yes,0,all ODs keep a surviving path
+germany50,random_link_failure_2,1,yes,0,all ODs keep a surviving path
+germany50,spike,0,yes,0,all ODs keep a surviving path
+germany50,mixed_spike_failure,1,yes,0,all ODs keep a surviving path
+germany50,capacity_degradation_50,0,yes,0,all ODs keep a surviving path
+vtlwavenet2011,normal,0,yes,0,all ODs keep a surviving path
+vtlwavenet2011,single_link_failure,1,partial,3,some ODs lost all candidate paths under failure
+vtlwavenet2011,two_link_failure,2,partial,6,some ODs lost all candidate paths under failure
+vtlwavenet2011,three_link_failure,3,partial,14,some ODs lost all candidate paths under failure
+vtlwavenet2011,random_link_failure_1,1,partial,6,some ODs lost all candidate paths under failure
+vtlwavenet2011,random_link_failure_2,1,yes,0,all ODs keep a surviving path
+vtlwavenet2011,spike,0,yes,0,all ODs keep a surviving path
+vtlwavenet2011,mixed_spike_failure,1,partial,3,some ODs lost all candidate paths under failure
+vtlwavenet2011,capacity_degradation_50,0,yes,0,all ODs keep a surviving path

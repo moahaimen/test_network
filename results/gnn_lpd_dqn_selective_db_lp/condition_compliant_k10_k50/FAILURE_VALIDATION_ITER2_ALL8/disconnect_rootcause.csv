@@ -1,0 +1,36 @@
+topology,scenario,od_index,src,dst,num_candidate_paths_before,nx_path_exists_after_failure,case,graph_strongly_connected,failed_links
+abilene,three_link_failure,54,HSTNng,WASHng,2,True,B (candidate-path limitation),True,HSTNng->ATLAng; NYCMng->WASHng; SNVAng->STTLng
+abilene,three_link_failure,87,LOSAng,WASHng,2,True,B (candidate-path limitation),True,HSTNng->ATLAng; NYCMng->WASHng; SNVAng->STTLng
+abilene,three_link_failure,109,SNVAng,WASHng,6,True,B (candidate-path limitation),True,HSTNng->ATLAng; NYCMng->WASHng; SNVAng->STTLng
+vtlwavenet2011,single_link_failure,89,n000,n090,1,True,B (candidate-path limitation),True,n091->n090
+vtlwavenet2011,single_link_failure,8370,n091,n089,1,True,B (candidate-path limitation),True,n091->n090
+vtlwavenet2011,single_link_failure,8371,n091,n090,1,True,B (candidate-path limitation),True,n091->n090
+vtlwavenet2011,two_link_failure,89,n000,n090,1,True,B (candidate-path limitation),True,n090->n091; n091->n090
+vtlwavenet2011,two_link_failure,8189,n089,n091,1,True,B (candidate-path limitation),True,n090->n091; n091->n090
+vtlwavenet2011,two_link_failure,8190,n090,n000,1,True,B (candidate-path limitation),True,n090->n091; n091->n090
+vtlwavenet2011,two_link_failure,8280,n090,n091,1,True,B (candidate-path limitation),True,n090->n091; n091->n090
+vtlwavenet2011,two_link_failure,8370,n091,n089,1,True,B (candidate-path limitation),True,n090->n091; n091->n090
+vtlwavenet2011,two_link_failure,8371,n091,n090,1,True,B (candidate-path limitation),True,n090->n091; n091->n090
+vtlwavenet2011,three_link_failure,89,n000,n090,1,True,B (candidate-path limitation),True,n030->n029; n090->n091; n091->n090
+vtlwavenet2011,three_link_failure,2816,n030,n087,2,True,B (candidate-path limitation),True,n030->n029; n090->n091; n091->n090
+vtlwavenet2011,three_link_failure,2817,n030,n088,2,True,B (candidate-path limitation),True,n030->n029; n090->n091; n091->n090
+vtlwavenet2011,three_link_failure,2818,n030,n089,2,True,B (candidate-path limitation),True,n030->n029; n090->n091; n091->n090
+vtlwavenet2011,three_link_failure,2819,n030,n090,2,True,B (candidate-path limitation),True,n030->n029; n090->n091; n091->n090
+vtlwavenet2011,three_link_failure,7946,n087,n029,2,True,B (candidate-path limitation),True,n030->n029; n090->n091; n091->n090
+vtlwavenet2011,three_link_failure,8037,n088,n029,2,True,B (candidate-path limitation),True,n030->n029; n090->n091; n091->n090
+vtlwavenet2011,three_link_failure,8128,n089,n029,2,True,B (candidate-path limitation),True,n030->n029; n090->n091; n091->n090
+vtlwavenet2011,three_link_failure,8189,n089,n091,1,True,B (candidate-path limitation),True,n030->n029; n090->n091; n091->n090
+vtlwavenet2011,three_link_failure,8190,n090,n000,1,True,B (candidate-path limitation),True,n030->n029; n090->n091; n091->n090
+vtlwavenet2011,three_link_failure,8219,n090,n029,2,True,B (candidate-path limitation),True,n030->n029; n090->n091; n091->n090
+vtlwavenet2011,three_link_failure,8280,n090,n091,1,True,B (candidate-path limitation),True,n030->n029; n090->n091; n091->n090
+vtlwavenet2011,three_link_failure,8370,n091,n089,1,True,B (candidate-path limitation),True,n030->n029; n090->n091; n091->n090
+vtlwavenet2011,three_link_failure,8371,n091,n090,1,True,B (candidate-path limitation),True,n030->n029; n090->n091; n091->n090
+vtlwavenet2011,random_link_failure_1,2389,n026,n023,1,True,B (candidate-path limitation),True,n026->n025
+vtlwavenet2011,random_link_failure_1,2390,n026,n024,1,True,B (candidate-path limitation),True,n026->n025
+vtlwavenet2011,random_link_failure_1,2391,n026,n025,1,True,B (candidate-path limitation),True,n026->n025
+vtlwavenet2011,random_link_failure_1,2481,n027,n024,1,True,B (candidate-path limitation),True,n026->n025
+vtlwavenet2011,random_link_failure_1,2482,n027,n025,1,True,B (candidate-path limitation),True,n026->n025
+vtlwavenet2011,random_link_failure_1,2573,n028,n025,1,True,B (candidate-path limitation),True,n026->n025
+vtlwavenet2011,mixed_spike_failure,89,n000,n090,1,True,B (candidate-path limitation),True,n091->n090
+vtlwavenet2011,mixed_spike_failure,8370,n091,n089,1,True,B (candidate-path limitation),True,n091->n090
+vtlwavenet2011,mixed_spike_failure,8371,n091,n090,1,True,B (candidate-path limitation),True,n091->n090

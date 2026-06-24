@@ -496,6 +496,38 @@ for _fn,_cap in [("failure_all8_mlu_cdf.png","Failure MLU CDF (current method, a
         doc.add_picture(str(_fp), width=Inches(4.8)); doc.paragraphs[-1].alignment=WD_ALIGN_PARAGRAPH.CENTER
         para(_cap, italic=True, size=8.5, align=WD_ALIGN_PARAGRAPH.CENTER)
 
+# 11b. Disconnected-OD root-cause analysis
+_RC = _FDIR / "disconnect_rootcause.csv"
+if _RC.exists():
+    h2("11b. Disconnected-OD Root-Cause Analysis (Case A vs Case B)")
+    para("Disconnected ODs mean some source-destination pairs could not be routed in that scenario. There are two "
+         "possible causes, which we separate explicitly:", size=9.5)
+    para("Case A - physical partition: after the link failures the physical graph is split, so NO path exists "
+         "between the source and destination (truly unroutable).", size=9, italic=True)
+    para("Case B - candidate-path limitation: the physical graph is still connected (a path exists in NetworkX), "
+         "but ALL of the OD's precomputed candidate paths happened to traverse a failed link, so the controller had "
+         "no surviving candidate to use. This is fixable by rebuilding / enriching the candidate-path set after "
+         "failure (e.g., failure-aware path recomputation or a larger k).", size=9, italic=True)
+    para("Method: for each disconnected OD we (1) rebuild the failed graph (remove the failed links), (2) test "
+         "strong connectivity and per-OD reachability with NetworkX, and (3) record which failed links caused it.",
+         size=9)
+    _rc = pd.read_csv(_RC)
+    _agg = _rc.groupby(["topology","scenario"]).agg(disc=("od_index","count"),
+            conn=("graph_strongly_connected","max"), nxpath=("nx_path_exists_after_failure","min"),
+            links=("failed_links","first")).reset_index()
+    table(["Topology","Scenario","Disc. ODs","Graph still connected?","NetworkX path exists?","Case","Failed links"],
+        [[DISP.get(r.topology,r.topology), r.scenario.replace('_',' '), int(r.disc), "yes" if r.conn else "no",
+          "yes" if r.nxpath else "no", "B (candidate-path)" if r.nxpath else "A (physical partition)", r.links]
+         for _,r in _agg.iterrows()], fontsz=6.6, widths=[1.0,1.3,0.6,1.0,1.0,1.1,2.4])
+    _nA = int((~_rc.nx_path_exists_after_failure).sum()); _nB = int(_rc.nx_path_exists_after_failure.sum())
+    para(f"Result: of {len(_rc)} disconnected OD-instances, {_nA} are Case A (physical partition) and {_nB} are "
+         f"Case B (candidate-path limitation). In every scenario the failed graph remained strongly connected and a "
+         f"NetworkX path still existed for each disconnected OD - so NONE of the disconnections are physical "
+         f"partitions; all are candidate-path limitations. The cause is that the precomputed k-path candidate set "
+         f"for those ODs routed entirely through the listed failed link(s). The remedy is failure-aware candidate-"
+         f"path rebuilding (recompute paths on the surviving graph, or increase k); no topology change is required.",
+         bold=True, size=9)
+
 # 12. Reproducibility
 h1("12. Reproducibility Checklist")
 table(["Item","Value"],

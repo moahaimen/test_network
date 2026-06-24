@@ -68,6 +68,10 @@ show(pd.DataFrame(rows, columns=["Action","Rows","Mean_ms","P95_ms","Max_ms"]), 
 if (CSV/"worst_case_hardened_FINAL.csv").exists():
     show(pd.read_csv(CSV/"worst_case_hardened_FINAL.csv"), "Worst-case hardening Tier B (clears FlexDATE worst-case on all 4, <500ms)")
 
+# 9b. Disconnected-OD root cause
+if (CSV/"disconnect_rootcause.csv").exists():
+    show(pd.read_csv(CSV/"disconnect_rootcause.csv"), "Disconnected-OD root cause (Case A physical partition vs Case B candidate-path limitation)")
+
 # 8. Ranking ablation
 if (CSV/"rank_ablation.csv").exists(): show(pd.read_csv(CSV/"rank_ablation.csv"), "Ranking ablation (gnn-only vs relief-only vs blend)")
 

@@ -1,0 +1,36 @@
+==========================================================================
+ HOW TO REPRODUCE THE RESULTS  (copy each line into the Terminal, in order)
+ Topology-Agnostic Bottleneck-Ranking DDQN  —  no retraining needed
+==========================================================================
+
+STEP 0 — open Terminal, go into this folder
+   (if you unzipped it on the Desktop, this is the path)
+
+   cd ~/Desktop/FinalMethod_Results_Reproduction
+
+STEP 1 — install the 3 required Python packages (one time)
+
+   pip install -r requirements.txt
+
+STEP 2 — reproduce ALL tables (report + full-metrics) from the CSV files
+
+   python3 reproduce_tables.py
+
+   -> prints every table; also saves them to  reproduced_tables.md
+
+STEP 3 — regenerate ALL figures / CDF plots from the CSV files
+
+   python3 make_cdf_plots.py
+
+   -> writes 11 figures into the  figs/  folder
+
+--------------------------------------------------------------------------
+OPTIONAL — do both steps with ONE command:
+
+   bash run_all.sh
+
+--------------------------------------------------------------------------
+If "python3" is not found, try "python" instead. If "pip" is not found,
+try "pip3 install -r requirements.txt".
+No datasets, no GPU, no training needed — only numpy, pandas, matplotlib.
+==========================================================================

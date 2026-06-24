@@ -3,3 +3,6 @@ __pycache__/
 .DS_Store
 *.lock
 ~$*
+
+# regenerated build caches (rebuilt by train_from_scratch.sh)
+*/condition_compliant_k10_k50/*/_cache/

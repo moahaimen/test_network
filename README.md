@@ -26,10 +26,14 @@ the 3/4 FlexDATE verdict, and the learning counters from the frozen per-cycle CS
 
 ```bash
 pip install -r requirements.txt
-# the pipeline stages (run in this order from the repo root):
-python3 scripts/phase1_5/run_agnostic_full.py      # topology-agnostic features + scaler + agnostic DDQN
-python3 scripts/phase1_5/run_final_kpath4.py        # bottleneck-ranked optimize tables (k_paths 8/4) + train
-python3 scripts/phase1_5/run_final_iter2.py         # FINAL controller (the frozen model) train + eval
+# ONE command runs the full 4-stage pipeline (~2 hours on CPU):
+bash train_from_scratch.sh
+
+# (equivalently, the 4 stages in order:)
+python3 scripts/phase1_5/bottleneck_precompute.py   # stage 1: optimize tables + features (needed by stage 2)
+python3 scripts/phase1_5/run_agnostic_full.py       # stage 2: topology-agnostic features + scaler + agnostic DDQN
+python3 scripts/phase1_5/run_final_kpath4.py        # stage 3: bottleneck-ranked optimize tables (k_paths 8/4) + train
+python3 scripts/phase1_5/run_final_iter2.py         # stage 4: FINAL controller (the frozen model) train + eval
 python3 scripts/phase1_5/learning_proof.py          # proof-of-learning (trained vs untrained vs random)
 python3 scripts/phase1_5/rank_ablation.py           # ranking ablation (GNN-only vs relief-only vs blend)
 python3 scripts/phase1_5/vtl_extend.py 200          # VtlWavenet robust eval (200 traffic matrices)

@@ -528,6 +528,30 @@ if _RC.exists():
          f"path rebuilding (recompute paths on the surviving graph, or increase k); no topology change is required.",
          bold=True, size=9)
 
+# 11c. Coverage scalability on large topologies
+_SCAL = OUT / "FINAL_LEARNED_4OF5_ITER2_DDQN" / "vtl_scalability.csv"
+if _SCAL.exists():
+    doc.add_page_break()
+    h2("11c. Coverage Scalability on Large Topologies (VtlWavenet)")
+    para("VtlWavenet has 8372 OD pairs, the largest topology in the suite. The learned controller selects K50 on "
+         "it, i.e. it optimizes ~50 OD pairs (~0.6% of all ODs); the rest stay on ECMP. This is a real coverage "
+         "limitation, so we measured the full coverage-vs-runtime frontier by forcing increasing K (bottleneck-"
+         "ranked top-K, selected-flow LP, carry-forward) on the 40-TM evaluation:", size=9.5)
+    _sc = pd.read_csv(_SCAL)
+    table(["K budget","ODs optimized","Coverage %","Mean PR","MLU vs ECMP %","Reduction %","Mean ms","P95 ms","p95 < 500 ms?"],
+        [[int(r.K_budget), int(r.ODs_optimized), f"{r.coverage_pct}%", f"{r.mean_PR:.4f}", f"{r.MLU_vs_ECMP_pct}%",
+          f"{r.reduction_pct}%", f"{r.mean_ms:.0f}", f"{r.p95_ms:.0f}", "yes" if r.under_500 else "NO"] for _,r in _sc.iterrows()], fontsz=7.5)
+    para("Three honest findings. (1) More coverage helps, but with diminishing returns and a steep runtime cost: "
+         "going from K50 (0.6%) to K2000 (23.9%) raises mean PR 0.937 -> 0.984 but pushes p95 decision time 308 ms "
+         "-> 1040 ms. The bottleneck ranking captures most of the achievable relief in the first few hundred ODs, "
+         "because the long tail of 8372 ODs contributes little to the bottleneck. (2) There is a hard runtime wall: "
+         "only K<=500 stays within the 500 ms p95 budget on VtlWavenet (K500: p95 489 ms); K800 and above exceed it "
+         "(593-1040 ms). So per-cycle near-full-coverage TE on an 8372-OD topology under 500 ms is not feasible with "
+         "this selected-LP approach - this is an inherent scalability limit of the method on very large topologies. "
+         "(3) The learned policy is slightly conservative here: K500 stays under 500 ms (p95 489 ms) yet gives a "
+         "higher PR (0.9527 vs 0.9373 at K50), so a higher K-floor on the largest topology would be a strictly "
+         "better runtime-safe operating point. This is a concrete, low-risk improvement, not a redesign.", italic=True, size=8.5)
+
 # 12. Reproducibility
 h1("12. Reproducibility Checklist")
 table(["Item","Value"],

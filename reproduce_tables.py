@@ -72,6 +72,10 @@ if (CSV/"worst_case_hardened_FINAL.csv").exists():
 if (CSV/"disconnect_rootcause.csv").exists():
     show(pd.read_csv(CSV/"disconnect_rootcause.csv"), "Disconnected-OD root cause (Case A physical partition vs Case B candidate-path limitation)")
 
+# 9c. VtlWavenet coverage scalability
+if (CSV/"vtl_scalability.csv").exists():
+    show(pd.read_csv(CSV/"vtl_scalability.csv"), "VtlWavenet coverage scalability (K-sweep: coverage vs PR vs runtime)")
+
 # 8. Ranking ablation
 if (CSV/"rank_ablation.csv").exists(): show(pd.read_csv(CSV/"rank_ablation.csv"), "Ranking ablation (gnn-only vs relief-only vs blend)")
 
